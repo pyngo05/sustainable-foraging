@@ -36,6 +36,11 @@ public class ForagerRepositoryDouble implements ForagerRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Forager add(Forager forager) throws DataException {
+        return null;
+    }
+
     private static Forager makeForager() {
         Forager forager = new Forager();
         forager.setId("0e4707f4-407e-4ec9-9665-baca0aabe88c");
