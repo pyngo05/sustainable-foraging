@@ -8,6 +8,7 @@ import learn.foraging.models.Item;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class View {
@@ -220,5 +221,15 @@ public class View {
         for (Item item : items) {
             io.printf("%s: %s, %s, %.2f $/kg%n", item.getId(), item.getName(), item.getCategory(), item.getDollarPerKilogram());
         }
+    }
+
+    public void displayItemWeights(Map<Item, Double> itemWeights) {
+        if (itemWeights == null || itemWeights.isEmpty()) {
+            io.println("No items.");
+            return;
+        }
+
+        io.println("Item ID\tItem Name\tWeight (kg)");
+        itemWeights.forEach((item, weight) -> io.printf("%d\t\t%s\t%f\n", item.getId(), item.getName(), weight));
     }
 }

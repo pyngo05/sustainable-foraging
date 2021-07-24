@@ -12,6 +12,8 @@ import learn.foraging.models.Item;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -61,8 +63,7 @@ public class Controller {
                     addItem();
                     break;
                 case REPORT_KG_PER_ITEM:
-                    view.displayStatus(false, "NOT IMPLEMENTED");
-                    view.enterToContinue();
+                    displayItemWeightsByDate();
                     break;
                 case REPORT_CATEGORY_VALUE:
                     view.displayStatus(false, "NOT IMPLEMENTED");
@@ -73,6 +74,49 @@ public class Controller {
                     break;
             }
         } while (option != MainMenuOption.EXIT);
+    }
+
+    // reports on total weight foraged for all items on a particular date
+    public void displayItemWeightsByDate() {
+
+        // get date from user
+        LocalDate date = view.getForageDate();
+
+        // get forages on that date
+        List<Forage> forages = forageService.findByDate(date);
+
+        // group forages by item, summing the weight of each item
+        // (should this logic be in the service layer?)
+        Map<Item, Double> itemWeights = forages.stream()
+                .collect(Collectors.groupingBy(
+                        Forage::getItem, // key
+                        Collectors.summingDouble(Forage::getKilograms) // aggregated value
+                ));
+
+        // display items with their total weight
+        view.displayItemWeights(itemWeights);
+
+//        Map<String, Long> playersByCountry = getPlayers().stream()
+//                .collect(Collectors.groupingBy(Player::getCountry,
+//                        Collectors.counting()));
+//
+//        for (String country : playersByCountry.keySet()) {
+//            System.out.println(country + ": " + playersByCountry.get(country));
+//        }
+
+//        Map<String, Forage> forageMap = forageRepository.findAll().stream()
+//                .collect(Collectors.toMap(i -> i.getId(), i -> i));
+//        Map<Integer, Item> itemMap = itemRepository.findAll().stream()
+//                .collect(Collectors.toMap(i -> i.getId(), i -> i));
+//
+//        List<Forage> result = forageRepository.findByDate(date);
+//        for (Forage forage : result) {
+//            forage.setForager(foragerMap.get(forage.getForager().getId()));
+//            forage.setItem(itemMap.get(forage.getItem().getId()));
+//        }
+//
+//        return result;
+
     }
 
     // top level menu
