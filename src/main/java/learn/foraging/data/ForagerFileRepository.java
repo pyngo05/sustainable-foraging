@@ -55,20 +55,13 @@ public class ForagerFileRepository implements ForagerRepository {
                 .collect(Collectors.toList());
     }
 
-    //TODO this doesn't iterate through entire list of foragers
     @Override
-    public Forager add(Forager newForager) throws DataException {
+    public Forager add(Forager forager) throws DataException {
         List<Forager> all = findAll();
-        for (Forager forager : all) {
-            if (forager.getFirstName().equals(newForager.getFirstName())
-                    && forager.getLastName().equals(newForager.getLastName())
-                    && forager.getState().equals(newForager.getState())) {
-                return null;
-            }
-        } newForager.setId(java.util.UUID.randomUUID().toString());
-        all.add(newForager);
+        forager.setId(java.util.UUID.randomUUID().toString());
+        all.add(forager);
         writeAll(all);
-        return newForager;
+        return forager;
     }
 
     private Forager deserialize(String[] fields) {

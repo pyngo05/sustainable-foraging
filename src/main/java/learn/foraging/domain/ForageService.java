@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+//TODO MAKE VALIDATION WORK
+
 public class ForageService {
 
     private final ForageRepository forageRepository;

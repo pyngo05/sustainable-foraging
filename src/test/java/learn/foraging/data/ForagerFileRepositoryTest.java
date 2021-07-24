@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ForagerFileRepositoryTest {
 
-    static final String SEED_FILE_PATH = "./data/forage_data_test/forager-seed.txt";
-    static final String TEST_FILE_PATH = "./data/forage_data_test/forager_data_test.csv";
-    static final String TEST_DIR_PATH = "./data/forage_data_test/forager_data_test";
+    static final String SEED_FILE_PATH = "./data/forager_data_test/forager-seed.txt";
+    static final String TEST_FILE_PATH = "./data/forager_data_test/forager_data_test.csv";
+    static final String TEST_DIR_PATH = "./data/forager_data_test/forager_data_test";
 
     ForagerFileRepository repository = new ForagerFileRepository(TEST_DIR_PATH);
 
@@ -43,24 +43,11 @@ class ForagerFileRepositoryTest {
         Forager forager = new Forager();
         forager.setId(String.valueOf(UUID.randomUUID()));
         forager.setFirstName("Mochi");
-        forager.setLastName("Mazzone");
+        forager.setLastName("Coco");
         forager.setState("DC");
 
         Forager actual = repository.add(forager);
         assertEquals("Mochi", actual.getFirstName());
-    }
-
-    @Test
-    void shouldNotAddDuplicate() throws DataException {
-        Forager forager = new Forager();
-        forager.setId("11db7255-1d0e-41cc-b5f6-0d8bb2364a38");
-        forager.setFirstName("Aymer");
-        forager.setLastName("Rayer");
-        forager.setState("ID");
-
-        repository.add(forager);
-        List<Forager> all = repository.findAll();
-        assertEquals(1000, all.size());
     }
 
 }
