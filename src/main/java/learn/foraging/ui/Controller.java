@@ -10,6 +10,7 @@ import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +67,7 @@ public class Controller {
                     displayItemWeightsByDate();
                     break;
                 case REPORT_CATEGORY_VALUE:
-                    view.displayStatus(false, "NOT IMPLEMENTED");
-                    view.enterToContinue();
+                    displayCategoryValuesByDate();
                     break;
                 case GENERATE:
                     generate();
@@ -96,26 +96,27 @@ public class Controller {
         // display items with their total weight
         view.displayItemWeights(itemWeights);
 
-//        Map<String, Long> playersByCountry = getPlayers().stream()
-//                .collect(Collectors.groupingBy(Player::getCountry,
-//                        Collectors.counting()));
-//
-//        for (String country : playersByCountry.keySet()) {
-//            System.out.println(country + ": " + playersByCountry.get(country));
-//        }
+    }
 
-//        Map<String, Forage> forageMap = forageRepository.findAll().stream()
-//                .collect(Collectors.toMap(i -> i.getId(), i -> i));
-//        Map<Integer, Item> itemMap = itemRepository.findAll().stream()
-//                .collect(Collectors.toMap(i -> i.getId(), i -> i));
-//
-//        List<Forage> result = forageRepository.findByDate(date);
-//        for (Forage forage : result) {
-//            forage.setForager(foragerMap.get(forage.getForager().getId()));
-//            forage.setItem(itemMap.get(forage.getItem().getId()));
-//        }
-//
-//        return result;
+    // reports on total value foraged for all categories on a particular date
+    public void displayCategoryValuesByDate() {
+
+        // get date from user
+        LocalDate date = view.getForageDate();
+
+        // get forages on that date
+        List<Forage> forages = forageService.findByDate(date);
+
+        // group forages by category, summing the value of each category
+        // (should this logic be in the service layer?)
+        Map<Category, Double> categoryValues = forages.stream()
+                .collect(Collectors.groupingBy(
+                        forage -> forage.getItem().getCategory(), // key
+                        Collectors.summingDouble(forage -> new BigDecimal(forage.getKilograms()).multiply(forage.getItem().getDollarPerKilogram()).doubleValue()) // aggregated value
+                ));
+
+        // display items with their total weight
+        view.displayCategoryValues(categoryValues);
 
     }
 

@@ -232,4 +232,14 @@ public class View {
         io.println("Item ID\tItem Name\tWeight (kg)");
         itemWeights.forEach((item, weight) -> io.printf("%d\t\t%s\t%f\n", item.getId(), item.getName(), weight));
     }
+
+    public void displayCategoryValues(Map<Category, Double> categoryValues) {
+        if (categoryValues == null || categoryValues.isEmpty()) {
+            io.println("No categories.");
+            return;
+        }
+
+        io.println("Category\tTotal Value ($)");
+        categoryValues.forEach((category, value) -> io.printf("%s\t%f\n", category.name(), value));
+    }
 }
