@@ -79,6 +79,12 @@ public class View {
         return Category.values()[io.readInt(message, 1, index) - 1];
     }
 
+    public String getForagerState() {
+        displayHeader("Search for Foragers by State");
+        String state = io.readString("State: ");
+        return state;
+    }
+
     public Item chooseItem(List<Item> items) {
 
         displayItems(items);
@@ -117,6 +123,15 @@ public class View {
         item.setName(io.readRequiredString("Item Name: "));
         item.setDollarPerKilogram(io.readBigDecimal("$/Kg: ", BigDecimal.ZERO, new BigDecimal("7500.00")));
         return item;
+    }
+
+    public Forager makeForager() {
+        displayHeader(MainMenuOption.ADD_FORAGER.getMessage());
+        Forager forager = new Forager();
+        forager.setFirstName(io.readRequiredString("First Name: "));
+        forager.setLastName(io.readRequiredString("Last Name: "));
+        forager.setState(io.readRequiredString("State: "));
+        return forager;
     }
 
     public GenerateRequest getGenerateRequest() {
@@ -179,6 +194,19 @@ public class View {
                     forage.getItem().getName(),
                     forage.getItem().getCategory(),
                     forage.getValue()
+            );
+        }
+    }
+
+    public void displayForagers(List<Forager> foragers) {
+        if (foragers == null || foragers.isEmpty()) {
+            io.println("No foragers found.");
+            return;
+        }
+        for (Forager forager : foragers) {
+            io.printf("%s %s%n",
+                    forager.getFirstName(),
+                    forager.getLastName()
             );
         }
     }

@@ -48,8 +48,6 @@ public class ForagerService {
             return result;
         }
 
-//        validateChildrenExist(forager, result);
-
         return result;
     }
 
@@ -86,12 +84,4 @@ public class ForagerService {
             }
         } return result;
     }
-
-//    private void validateChildrenExist(Forager forager, Result<Forager> result) {
-//
-//        if (forager.getId() == null
-//                || repository.findById(forager.getId()) == null) {
-//            result.addErrorMessage("Forager does not exist.");
-//        }
-//    }
 }

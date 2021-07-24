@@ -1,12 +1,8 @@
 package learn.foraging.data;
 
-import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
-import learn.foraging.models.Item;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

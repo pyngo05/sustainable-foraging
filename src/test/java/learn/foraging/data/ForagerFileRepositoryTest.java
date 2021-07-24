@@ -1,6 +1,5 @@
 package learn.foraging.data;
 
-import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +33,26 @@ class ForagerFileRepositoryTest {
     void shouldFindAll() {
         ForagerFileRepository repo = new ForagerFileRepository("./data/foragers.csv");
         List<Forager> all = repo.findAll();
-        assertEquals(1000, all.size());
+        assertEquals(1001, all.size());
+    }
+
+    @Test
+    void shouldFindByExistingId() {
+        Forager forager = repository.findById("e0ec606d-09e5-4e97-b077-43475cca1638");
+        assertNotNull(forager);
+        assertEquals("Shirlene", forager.getFirstName());
+    }
+
+    @Test
+    void shouldNotFindByMissingId() {
+        Forager forager = repository.findById("1000");
+        assertNull(forager);
+    }
+
+    @Test
+    void shouldFindByExisitngState() {
+        List<Forager> forager = repository.findByState("DC");
+        assertNotNull(forager);
     }
 
     @Test
@@ -49,5 +66,4 @@ class ForagerFileRepositoryTest {
         Forager actual = repository.add(forager);
         assertEquals("Mochi", actual.getFirstName());
     }
-
 }
