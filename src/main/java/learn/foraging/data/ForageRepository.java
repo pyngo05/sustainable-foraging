@@ -1,6 +1,7 @@
 package learn.foraging.data;
 
 import learn.foraging.models.Forage;
+import learn.foraging.models.Forager;
 
 import java.time.LocalDate;
 import java.util.List;

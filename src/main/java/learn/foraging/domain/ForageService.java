@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-//TODO MAKE VALIDATION WORK
-
 public class ForageService {
 
     private final ForageRepository forageRepository;
@@ -93,12 +91,15 @@ public class ForageService {
             return result;
         }
 
-        validateFields(forage, result);
+        result = validateFields(forage);
         if (!result.isSuccess()) {
             return result;
         }
 
-        validateChildrenExist(forage, result);
+        result = validateChildrenExist(forage);
+        if (!result.isSuccess()) {
+            return result;
+        }
 
         return result;
     }
@@ -125,7 +126,9 @@ public class ForageService {
         return result;
     }
 
-    private void validateFields(Forage forage, Result<Forage> result) {
+    private Result<Forage> validateFields(Forage forage) {
+        Result<Forage> result = new Result<>();
+
         // No future dates.
         if (forage.getDate().isAfter(LocalDate.now())) {
             result.addErrorMessage("Forage date cannot be in the future.");
@@ -134,9 +137,22 @@ public class ForageService {
         if (forage.getKilograms() <= 0 || forage.getKilograms() > 250.0) {
             result.addErrorMessage("Kilograms must be a positive number less than 250.0");
         }
+
+        List<Forage> all = forageRepository.findByDate(forage.getDate());
+        for (Forage existingForage : all) {
+            if (existingForage.getItem().getId() == forage.getItem().getId()
+                    && existingForage.getForager().getId().equals(forage.getForager().getId())) {
+                result.addErrorMessage("Item was already foraged by forager on that day.");
+
+            }
+        }
+
+        return result;
     }
 
-    private void validateChildrenExist(Forage forage, Result<Forage> result) {
+    // validate that forager and item exists
+    private Result<Forage> validateChildrenExist(Forage forage) {
+        Result<Forage> result = new Result<>();
 
         if (forage.getForager().getId() == null
                 || foragerRepository.findById(forage.getForager().getId()) == null) {
@@ -146,5 +162,7 @@ public class ForageService {
         if (itemRepository.findById(forage.getItem().getId()) == null) {
             result.addErrorMessage("Item does not exist.");
         }
+
+        return result;
     }
 }

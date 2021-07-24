@@ -61,6 +61,7 @@ public class ForageFileRepository implements ForageRepository {
         return false;
     }
 
+
     private String getFilePath(LocalDate date) {
         return Paths.get(directory, date + ".csv").toString();
     }
@@ -101,4 +102,5 @@ public class ForageFileRepository implements ForageRepository {
         result.setItem(item);
         return result;
     }
+
 }
